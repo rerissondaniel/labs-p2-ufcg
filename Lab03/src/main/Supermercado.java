@@ -1,11 +1,42 @@
 package main;
 
 public class Supermercado {
-	private ColecaoDinamicaDeProdutos estoque = new ColecaoDinamicaDeProdutos();
-	private ColecaoDinamicaDeProdutos vendidos = new ColecaoDinamicaDeProdutos();
+	
+	/**
+	 * Constantes que indicam o status das operações realizadas.
+	 */
+	public static final int OPERACAO_NAO_REALIZADA = 0;
+	public static final int PRODUTO_ADICIONADO = 1;
+	public static final int PRODUTO_ATUALIZADO = 2;
 
-	public boolean cadastraProduto(Produto produto) {
-		return estoque.adicionaProduto(produto);
+	private Estoque estoque = new Estoque();
+	private double totalArrecadado;
+	
+	/**
+	 * Cadastra ou atualiza <i>produto</i> no estoque.
+	 * @param produto a ser atualizado ou cadastrado.
+	 * @return Um valor indicando se o produto foi atualizado, cadastrado ou se não foi possível realizar nenhuma operação.
+	 */
+	public int cadastraOuAtualizaProduto(Produto produto) {
+		int status = OPERACAO_NAO_REALIZADA;
+		//Caso o produto não exista e sua adição seja bem sucedida.
+		if (estoque.pesquisaProduto(produto.getNome()) == Estoque.PRODUTO_NAO_ENCONTRADO &&
+				estoque.adicionaProduto(produto)) {
+				status = PRODUTO_ADICIONADO;
+		} else if (estoque.atualizarProduto(produto)) {
+			status = PRODUTO_ATUALIZADO;
+		}
+		return status;
+	}
+	
+	/**
+	 * Pesquisa por um produto que tenha <i>nome</i> como nome.
+	 * @param nome
+	 * @return Produto que tem <i>nome</i> como valor de nome, null, caso contrário.
+	 */
+	public Produto getProdutoPorNome(String nomeProduto){
+		int indice = estoque.pesquisaProduto(nomeProduto);
+		return estoque.getProdutoAt(indice);
 	}
 
 	/**
@@ -15,42 +46,16 @@ public class Supermercado {
 	 * @param nomeProduto
 	 *            Nome do produto que será vendido.
 	 */
-	public boolean vendeProduto(String nomeProduto) {
-
-		int indice = estoque.pesquisaProduto(nomeProduto);
-		Produto produto = estoque.getProdutoAt(indice);
-
-		if (produto != null && produto.getQuantidade() > 0) {
-			Integer quantidade = produto.getQuantidade();
-			produto.setQuantidade(quantidade - 1);
-			atualizaVendidos(produto);
+	public boolean vendeProduto(Produto produto, int quantidade) {
+		if (produto != null && produto.getQuantidade() >= quantidade) {
+			Integer quantidadeProd = produto.getQuantidade();
 			
-			//Caso o produto não tenha mais unidades, será removido do estoque.
-			if (produto.getQuantidade() == 0) {
-				estoque.removeProduto(indice);
-			}
+			produto.setQuantidade(quantidadeProd - quantidade);
+			totalArrecadado += produto.getPrecoUnitario() * quantidade;
 			
 			return true;
 		}
 		return false;
-	}
-
-	/**
-	 * Atualiza a lista de produtos vendidos.
-	 */
-	private void atualizaVendidos(Produto produto) {
-		int indice = vendidos.pesquisaProduto(produto.getNome());
-
-		if (indice == ColecaoDinamicaDeProdutos.PRODUTO_NAO_ENCONTRADO) {
-			Produto copia = new Produto(produto);
-			vendidos.adicionaProduto(copia);
-			copia.setQuantidade(1);// Há pelo menos uma unidade que foi vendida.
-		} else {
-			// Caso o produto já tenha sido vendido, apenas atualizamos sua
-			// quantidade.
-			Produto produtoVendido = vendidos.getProdutoAt(indice);
-			produtoVendido.setQuantidade(produtoVendido.getQuantidade() + 1);
-		}
 	}
 
 	/**
@@ -61,12 +66,24 @@ public class Supermercado {
 		return estoque.getProdutos();
 	}
 
+	public double getTotalArrecadado() {
+		return totalArrecadado;
+	}
+
+	public double getTotalPossivelArrecadado() {
+		return somaPrecos(getEstoque());
+	}
+	
 	/**
-	 * 
-	 * @return Um array de produtos correspondente aos produtos vendidos pelo
-	 *         supermercado.
+	 * Soma os preços de <i>produtos</i>.
+	 * @param produtos
+	 * @return
 	 */
-	public Produto[] getVendidos() {
-		return vendidos.getProdutos();
+	private double somaPrecos(Produto [] produtos){
+		double total = 0.0;
+		for(Produto produto : getEstoque()){
+			total += produto.getPrecoUnitario() * produto.getQuantidade();
+		}
+		return total;
 	}
 }

@@ -59,7 +59,6 @@ public class Produto {
 
 	@Override
 	public String toString() {
-		return "Nome: " + nome + System.lineSeparator() + "Preço Unitário: R$ " + String.format("%.2f", precoUnitario)
-				+ System.lineSeparator() + "Tipo: " + tipo + System.lineSeparator() + "Quantidade: " + quantidade;
+		return String.format("%s (%s). R$%.2f Restante: %d", this.nome, this.tipo, this.precoUnitario, this.quantidade);
 	}
 }

@@ -2,7 +2,7 @@ package main;
 
 import java.util.Arrays;
 
-public class ColecaoDinamicaDeProdutos {
+public class Estoque {
 	private static int indicesStatus = -100;
 	public static final int PRODUTO_NAO_ENCONTRADO = indicesStatus--;
 
@@ -36,7 +36,8 @@ public class ColecaoDinamicaDeProdutos {
 	 * @return
 	 */
 	public int pesquisaProduto(String nomeProduto) {
-		if (nomeProduto == null)return PRODUTO_NAO_ENCONTRADO;
+		if (nomeProduto == null)
+			return PRODUTO_NAO_ENCONTRADO;
 
 		for (int i = 0; i < ultimaPosicaoValida; i++) {
 			if (nomeProduto.equals(produtos[i].getNome())) {
@@ -53,7 +54,7 @@ public class ColecaoDinamicaDeProdutos {
 	 * @return O produto na posição indice do array.
 	 */
 	public Produto getProdutoAt(int indice) {
-		if (validaIndice(indice)){
+		if (validaIndice(indice)) {
 			return produtos[indice];
 		}
 		return null;
@@ -77,6 +78,20 @@ public class ColecaoDinamicaDeProdutos {
 	}
 
 	/**
+	 * 
+	 * @param nomeProduto
+	 * @return true se o produto foi removido, false caso contrário.
+	 */
+	public boolean removeProduto(String nomeProduto) {
+		int indice = pesquisaProduto(nomeProduto);	
+		if (indice == PRODUTO_NAO_ENCONTRADO){
+			return false;
+		}
+
+		return removeProduto(indice);
+	}
+
+	/**
 	 * Valida indice em relação à última posição válida e ao mesmo ser menor que
 	 * zero.
 	 * 
@@ -95,5 +110,25 @@ public class ColecaoDinamicaDeProdutos {
 	 */
 	public Produto[] getProdutos() {
 		return Arrays.copyOf(produtos, ultimaPosicaoValida);
+	}
+
+	/**
+	 * Substitui o produto que tem o mesmo nome do produto passado como
+	 * argumento pelo produto que foi passado como argumento.
+	 * 
+	 * @return true se o produto foi atualizado. false caso contrário.
+	 */
+	public boolean atualizarProduto(Produto produto) {
+		if (produto == null)
+			return false;
+
+		int indice = pesquisaProduto(produto.getNome());
+
+		if (indice == PRODUTO_NAO_ENCONTRADO)
+			return false;
+
+		produtos[indice] = produto;
+
+		return true;
 	}
 }
