@@ -10,28 +10,68 @@ public class Usuario {
 		this.musiteca = new Musiteca();
 	}
 
-	public boolean adicionaPlaylist(final String nomePlaylist, final String nomeAlbum, final int faixa)
+	/**
+	 * Adiciona uma nova playlist.
+	 * 
+	 * @param nomePlaylist
+	 * @param nomeAlbum
+	 * @param faixa
+	 * @return
+	 * @throws IllegalArgumentException
+	 */
+	public boolean adicionaPlaylist(final String nomePlaylist,
+			final String nomeAlbum, final int faixa)
 			throws IllegalArgumentException {
 		return musiteca.adicionaPlaylist(nomePlaylist, nomeAlbum, faixa);
 	}
 
-	public Album getAlbum(final String titulo){
+	/**
+	 * Recupera um álbum pelo seu título.
+	 * 
+	 * @param titulo
+	 * @return
+	 */
+	public Album getAlbum(final String titulo) {
 		return musiteca.getAlbum(titulo);
 	}
-	
-	public Album getFavorito(final String titulo){
+
+	/**
+	 * Recupera um favorito pelo seu título.
+	 * 
+	 * @param titulo
+	 * @return
+	 */
+	public Album getFavorito(final String titulo) {
 		return musiteca.getFavorito(titulo);
 	}
-	
-	public boolean adicionaFavorito(final Album album) throws IllegalArgumentException{
+
+	/**
+	 * Adiciona um favorito.
+	 * 
+	 * @param album
+	 * @return
+	 * @throws IllegalArgumentException
+	 *             caso não seja possível adicionar {@code album} aos favoritos.
+	 */
+	public boolean adicionaFavorito(final Album album)
+			throws IllegalArgumentException {
 		return musiteca.adicionaFavorito(album);
 	}
 
-	public boolean adicionaAlbum(final Album album) throws IllegalArgumentException{
+	/**
+	 * Adiciona um álbum.
+	 * 
+	 * @param album
+	 * @return {@code true}, caso o álbum tenha sido adicionado. {@code false}
+	 *         caso contrário.
+	 * @throws IllegalArgumentException
+	 */
+	public boolean adicionaAlbum(final Album album)
+			throws IllegalArgumentException {
 		return musiteca.adicionaAlbum(album);
 	}
-	
-	public String getNome(){
+
+	public String getNome() {
 		return nome;
 	}
 }

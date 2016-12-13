@@ -2,13 +2,24 @@ package main;
 
 public class Musica {
 	public static final String MUSICA_INVALIDA = "Música inválida";
-	//TODO adicionar mensagens específicas para titulo e genero inválidos.
 	private String titulo;
 	private int duracao;
 	private String genero;
 
-	public Musica(String titulo, int duracao, String genero) throws IllegalArgumentException {
-		if(titulo == null || "".equals(titulo.trim()) || genero == null || "".equals(genero.trim()) || duracao < 0){
+	/**
+	 * Atribui os valores dos parâmetros aos atributos e checa a validade da
+	 * música.
+	 * 
+	 * @param titulo
+	 * @param duracao
+	 * @param genero
+	 * @throws IllegalArgumentException
+	 *             caso a música seja inválida.
+	 */
+	public Musica(String titulo, int duracao, String genero)
+			throws IllegalArgumentException {
+		if (titulo == null || "".equals(titulo.trim()) || genero == null
+				|| "".equals(genero.trim()) || duracao < 0) {
 			throw new IllegalArgumentException(MUSICA_INVALIDA);
 		}
 		this.titulo = titulo;
@@ -16,10 +27,10 @@ public class Musica {
 		this.genero = genero;
 	}
 
-	public String getTitulo(){
+	public String getTitulo() {
 		return titulo;
 	}
-	
+
 	public int getDuracao() {
 		return duracao;
 	}
@@ -28,6 +39,9 @@ public class Musica {
 		return genero;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -37,6 +51,9 @@ public class Musica {
 		return result;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)

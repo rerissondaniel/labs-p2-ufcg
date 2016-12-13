@@ -1,12 +1,12 @@
 package test;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-
 import main.Album;
 import main.Musica;
 import main.Musiteca;
+
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 
 public class MusitecaTest {
 
@@ -23,7 +23,45 @@ public class MusitecaTest {
 
 	@Test
 	public void testaAdicionaPlaylist() {
+		Musiteca musiteca = new Musiteca();
+		musiteca.adicionaAlbum(album);
 
+		try {
+			musiteca.adicionaPlaylist("Para dançar", null, 2);
+			Assert.fail();
+		} catch (IllegalArgumentException ex) {
+			Assert.assertEquals(Musiteca.ALBUM_NULO_OU_VAZIO, ex.getMessage());
+		}
+
+		try {
+			musiteca.adicionaPlaylist("Para dançar", "   ", 2);
+			Assert.fail();
+		} catch (IllegalArgumentException ex) {
+			Assert.assertEquals(Musiteca.ALBUM_NULO_OU_VAZIO, ex.getMessage());
+		}
+
+		try {
+			musiteca.adicionaPlaylist(null, album.getTitulo(), 1);
+			Assert.fail();
+		} catch (IllegalArgumentException ex) {
+			Assert.assertEquals(Musiteca.PLAYLIST_NULA_OU_VAZIA,
+					ex.getMessage());
+		}
+
+		try {
+			musiteca.adicionaPlaylist("      ", album.getTitulo(), 2);
+			Assert.fail();
+		} catch (IllegalArgumentException ex) {
+			Assert.assertEquals(Musiteca.PLAYLIST_NULA_OU_VAZIA,
+					ex.getMessage());
+		}
+
+		try {
+			musiteca.adicionaPlaylist("Para varrer a casa", "Culture of fear",
+					1);
+		} catch (IllegalArgumentException ex) {
+			Assert.assertEquals(Musiteca.ALBUM_NAO_EXISTENTE, ex.getMessage());
+		}
 	}
 
 	@Test
@@ -62,7 +100,8 @@ public class MusitecaTest {
 			musiteca.adicionaFavorito(album);
 			Assert.fail();
 		} catch (IllegalArgumentException ex) {
-			Assert.assertEquals(ex.getMessage(), Musiteca.ALBUM_REPETIDO_FAVORITOS);
+			Assert.assertEquals(ex.getMessage(),
+					Musiteca.ALBUM_REPETIDO_FAVORITOS);
 		}
 	}
 
@@ -79,30 +118,30 @@ public class MusitecaTest {
 		musiteca.adicionaFavorito(album);
 		Assert.assertEquals(musiteca.getFavorito(album.getTitulo()), album);
 	}
-	
+
 	@Test
-	public void testaEquals(){
+	public void testaEquals() {
 		Musiteca musiteca = new Musiteca();
 		musiteca.adicionaAlbum(album);
 		Musiteca musiteca1 = new Musiteca();
 		musiteca1.adicionaAlbum(album);
-		
+
 		Assert.assertEquals(musiteca, musiteca1);
-		
+
 		Musica musica = new Musica("Antes que seja tarde", 4, "unknown");
 		musiteca.getAlbum(album.getTitulo()).adicionaMusica(musica);
 		Assert.assertNotSame(musiteca, musiteca1);
 	}
-	
+
 	@Test
-	public void testaHashCode(){
+	public void testaHashCode() {
 		Musiteca musiteca = new Musiteca();
 		musiteca.adicionaAlbum(album);
 		Musiteca musiteca1 = new Musiteca();
 		musiteca1.adicionaAlbum(album);
-		
+
 		Assert.assertEquals(musiteca.hashCode(), musiteca1.hashCode());
-		
+
 		Musica musica = new Musica("Antes que seja tarde", 4, "unknown");
 		musiteca.getAlbum(album.getTitulo()).adicionaMusica(musica);
 		Assert.assertNotSame(musiteca.hashCode(), musiteca1.hashCode());

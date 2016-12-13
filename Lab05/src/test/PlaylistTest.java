@@ -11,11 +11,15 @@ public class PlaylistTest{
 	@Test
 	public void testaPesquisaMusica() {
 		Playlist playlist = new Playlist("Para Testar");
-		Musica musica = new Musica("The less I know the better", 5, "Lonerism");
+		Musica musica = new Musica("The less I know the better", 5, "rock");
 		playlist.adicionaMusica(musica);
 
 		Assert.assertEquals(playlist.pesquisaMusica(musica.getTitulo()), musica);
 		Assert.assertNull(playlist.pesquisaMusica("Let it happen"));
+		
+		Assert.assertTrue(playlist.pesquisaMusica(musica));
+		musica = new Musica("Elephant", 3, "rock");
+		Assert.assertFalse(playlist.pesquisaMusica(musica));
 	}
 
 	@Test
