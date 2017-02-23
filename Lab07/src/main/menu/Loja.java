@@ -1,6 +1,6 @@
 package main.menu;
 
-import main.controlador.LojaControlador;
+import main.controller.LojaController;
 import main.entidade.jogo.exception.JogoInvalidoException;
 import main.entidade.usuario.exception.UsuarioInvalidoException;
 import main.service.exception.SaldoInsuficienteException;
@@ -64,16 +64,16 @@ public class Loja {
     /**
      * Controller ao qual será delegada a execução das operações.
      */
-    private final LojaControlador loja;
+    private final LojaController loja;
 
     /**
      * Construtor onde são atribuídas as dependências deste objeto.
      *
      * @param entrada - {@link Entrada} da qual serão lidos os dados.
      * @param saida   - {@link Saida} na qual serão escritos os resultados.
-     * @param loja    - {@link LojaControlador} ao qual será delegada a execução das operações.
+     * @param loja    - {@link LojaController} ao qual será delegada a execução das operações.
      */
-    public Loja(final Entrada entrada, final Saida saida, LojaControlador loja) {
+    public Loja(final Entrada entrada, final Saida saida, LojaController loja) {
         this.entrada = entrada;
         this.saida = saida;
         this.loja = loja;

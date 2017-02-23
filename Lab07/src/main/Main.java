@@ -1,6 +1,6 @@
 package main;
 
-import main.controlador.implementacao.LojaControladorImpl;
+import main.controller.implementacao.LojaControllerImpl;
 import main.service.implementacao.FormatadoraCentralP2Cg;
 import util.io.implementacao.Console;
 import util.io.implementacao.Teclado;
@@ -23,7 +23,7 @@ public class Main {
      */
     private static void iniciaLoja() {
         Loja loja = new Loja(new Teclado(), new Console(),
-                new LojaControladorImpl(new HashMap<>(), new FormatadoraCentralP2Cg()));
+                new LojaControllerImpl(new HashMap<>(), new FormatadoraCentralP2Cg()));
 
         loja.iniciaSistema();
     }

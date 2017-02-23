@@ -1,4 +1,4 @@
-package main.controlador;
+package main.controller;
 
 import main.entidade.jogo.exception.JogoInvalidoException;
 import main.entidade.usuario.Usuario;
@@ -12,24 +12,18 @@ import java.util.Set;
 /**
  * Interface responsável pelas operações da loja.
  */
-public interface LojaControlador {
+public interface LojaController {
 
     /**
      * Constantes recomendadas para a implementação desta interface.
      */
 
     String USUARIO_EXISTENTE = "Login já cadastrado";
-    String TIPO_JOGO_NAO_ENCONTRADO = "Não há o tipo de jogo indicado";
     String SALDO_DE_USUARIO_INSUFICIENTE = "Saldo do usuário insuficiente";
     String USUARIO_NAO_ENCONTRADO = "O usuário não pode ser encontrado.";
     String USUARIO_JA_E_VETERANO = "Usuário já é veterano.";
     String QUANTIDADE_X2P_INSUFICIENTE = "Usuário não possui quantidade suficiente de x2p";
     int X2P_MINIMO_VETERANO = 1000;
-
-    /**
-     * Template para a mensagem de jogabilidade inexistente.
-     */
-    String TEMPLATE_JOGABILIDADE_NAO_EXISTENTE = "Jogo inválido, a jogabilidade  \"%s\" não existe.";
 
     /**
      * Adiciona um {@link Usuario} à loja.

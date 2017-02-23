@@ -1,32 +1,28 @@
-package main.controlador.implementacao;
+package main.controller.implementacao;
 
-import main.controlador.LojaControlador;
-import main.entidade.jogo.Jogabilidade;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import main.controller.LojaController;
 import main.entidade.jogo.Jogo;
 import main.entidade.jogo.exception.JogoInvalidoException;
-import main.entidade.jogo.tipo.Luta;
-import main.entidade.jogo.tipo.Plataforma;
-import main.entidade.jogo.tipo.Rpg;
 import main.entidade.usuario.Usuario;
 import main.entidade.usuario.exception.UsuarioInvalidoException;
 import main.entidade.usuario.role.Role;
 import main.entidade.usuario.role.implementacao.Noob;
 import main.entidade.usuario.role.implementacao.Veterano;
+import main.factory.JogoFactory;
+import main.factory.UsuarioFactory;
 import main.service.Formatadora;
 import main.service.exception.SaldoInsuficienteException;
 import main.service.exception.UsuarioInaptoException;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 /**
- * Implementação de {@link LojaControlador}.
+ * Implementação de {@link LojaController}.
  * Created by rerissondcsm on 15/02/17.
  */
-public class LojaControladorImpl implements LojaControlador {
+public class LojaControllerImpl implements LojaController {
 
     /**
      * Mapa de login para {@link Usuario} desta loja.
@@ -45,7 +41,7 @@ public class LojaControladorImpl implements LojaControlador {
      * @param usuarios    - {@link Map} com valores na forma <String loginUsuario, Usuario usuario>.
      * @param formatadora - {@link Formatadora} para formatação de dados.
      */
-    public LojaControladorImpl(Map<String, Usuario> usuarios, Formatadora formatadora) {
+    public LojaControllerImpl(Map<String, Usuario> usuarios, Formatadora formatadora) {
         this.usuarios = usuarios;
         this.formatadora = formatadora;
     }
@@ -56,10 +52,13 @@ public class LojaControladorImpl implements LojaControlador {
     @Override
     public void adicionaUsuario(final String nome, final String login, final String tipo)
             throws UsuarioInvalidoException {
-        Usuario usuario = criaUsuario(nome, login, tipo);
+    	verificaExistenciaUsuario(login);
+    	
+        Usuario usuario = UsuarioFactory.criaUsuario(nome, login, tipo);
+        
         usuarios.put(login, usuario);
     }
-
+    
     /**
      * {@inheritDoc}
      */
@@ -112,21 +111,24 @@ public class LojaControladorImpl implements LojaControlador {
         Usuario usuario = usuarios.get(login);
         verificaValidadeUsuario(usuario);
 
-        Set<Jogabilidade> jogabilidades = new HashSet<>();
-
-        for (String jogabilidade : jogabilidadesStr) {
-            Jogabilidade jogabilidadeAux = Jogabilidade.getPorEstilo(jogabilidade);
-            if (jogabilidadeAux == null) {
-                throw new JogoInvalidoException(String.format(TEMPLATE_JOGABILIDADE_NAO_EXISTENTE, jogabilidade));
-            }
-            jogabilidades.add(jogabilidadeAux);
-        }
-
-        Jogo jogo = criaJogo(nomeJogo, preco, tipo, jogabilidades);
+        Jogo jogo = JogoFactory.criaJogo(nomeJogo, preco, tipo, jogabilidadesStr);
+        
         verificaSaldoSuficiente(usuario, jogo);
         usuario.adicionaJogo(jogo);
     }
-
+    
+    /**
+     * 
+     * @param login
+     * @throws UsuarioInvalidoException
+     */
+    private void verificaExistenciaUsuario(String login) throws UsuarioInvalidoException{
+	    Usuario usuario = usuarios.get(login);
+	    if (usuario != null) {
+	        throw new UsuarioInvalidoException(USUARIO_EXISTENTE);
+	    }
+    }
+    
     /**
      * Verifica a validade de um usuário.
      *
@@ -165,56 +167,5 @@ public class LojaControladorImpl implements LojaControlador {
         }else if(usuario.getX2p() < X2P_MINIMO_VETERANO){
             throw new UsuarioInaptoException(QUANTIDADE_X2P_INSUFICIENTE);
         }
-    }
-
-    /**
-     * Cria um usuario a partir dos parâmetros.
-     *
-     * @param nome
-     * @param login
-     * @param tipo
-     * @return
-     * @throws UsuarioInvalidoException Caso algum dos dados seja inválido.
-     */
-    private Usuario criaUsuario(String nome, String login, String tipo) throws UsuarioInvalidoException {
-        Usuario usuario = usuarios.get(login);
-        if (usuario != null) {
-            throw new UsuarioInvalidoException(USUARIO_EXISTENTE);
-        }
-        if (Noob.REPRESENTACAO_STRING.equalsIgnoreCase(tipo)) {
-            usuario = new Usuario(nome, login, new HashMap<>(), new Noob());
-        } else if (Veterano.REPRESENTACAO_STRING.equalsIgnoreCase(tipo)) {
-            usuario = new Usuario(nome, login, new HashMap<>(), new Veterano());
-        } else {
-            usuario = new Usuario(nome, login, new HashMap<>(), null);
-        }
-        return usuario;
-    }
-
-    /**
-     * Cria um jogo a partir dos atributos passados como parâmetro.
-     *
-     * @param nomeJogo
-     * @param preco
-     * @param tipo
-     * @param jogabilidade
-     * @return
-     * @throws JogoInvalidoException - Caso o tipo do jogo não exista no sistema.
-     */
-    private Jogo criaJogo(final String nomeJogo, final double preco, final String tipo,
-                          final Set<Jogabilidade> jogabilidade) throws JogoInvalidoException {
-        Jogo jogo;
-
-        if (tipo.equalsIgnoreCase(Luta.REPRESENTACAO_STRING)) {
-            jogo = new Luta(nomeJogo, preco, jogabilidade);
-        } else if (tipo.equalsIgnoreCase(Rpg.REPRESENTACAO_STRING)) {
-            jogo = new Rpg(nomeJogo, preco, jogabilidade);
-        } else if (tipo.equalsIgnoreCase(Plataforma.REPRESENTACAO_STRING)) {
-            jogo = new Plataforma(nomeJogo, preco, jogabilidade);
-        } else {
-            throw new JogoInvalidoException(TIPO_JOGO_NAO_ENCONTRADO);
-        }
-
-        return jogo;
     }
 }

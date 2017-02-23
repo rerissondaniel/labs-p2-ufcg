@@ -1,30 +1,32 @@
 package test.unidade.controlador;
 
-import main.controlador.LojaControlador;
-import main.controlador.implementacao.LojaControladorImpl;
+import main.controller.LojaController;
+import main.controller.implementacao.LojaControllerImpl;
 import main.entidade.jogo.Jogo;
 import main.entidade.jogo.exception.JogoInvalidoException;
 import main.entidade.jogo.tipo.Luta;
 import main.entidade.usuario.exception.UsuarioInvalidoException;
 import main.service.exception.SaldoInsuficienteException;
 import main.service.exception.UsuarioInaptoException;
+
 import org.junit.Assert;
 import org.junit.Test;
+
 import test.util.TestUtils;
 
 import java.util.HashSet;
 
 /**
- * Testes para {@link LojaControladorImpl}
+ * Testes para {@link LojaControllerImpl}
  * Created by rerissondcsm on 17/02/17.
  */
 public class LojaControladorImplTest {
 
-    private LojaControlador controlador;
+    private LojaController controlador;
 
     @Test
     public void testaAdicionaUsuario() throws UsuarioInvalidoException {
-        controlador = new LojaControladorImpl(TestUtils.getMapaUsuarios(), TestUtils.getFormatadora());
+        controlador = new LojaControllerImpl(TestUtils.getMapaUsuarios(), TestUtils.getFormatadora());
         String login = "marcos";
         String nome = "Marcos";
         controlador.adicionaUsuario(nome, login, "Noob");
@@ -32,7 +34,7 @@ public class LojaControladorImplTest {
 
     @Test
     public void testaAdicionarDinheiroUsuario() throws JogoInvalidoException, SaldoInsuficienteException, UsuarioInvalidoException {
-        controlador = new LojaControladorImpl(TestUtils.getMapaUsuarios(), TestUtils.getFormatadora());
+        controlador = new LojaControllerImpl(TestUtils.getMapaUsuarios(), TestUtils.getFormatadora());
         Assert.assertTrue(controlador.adicionarDinheiroUsuario("mauro", 25.00));
         Jogo tekken = TestUtils.getJogos().get("Tekken");
         controlador.vendeJogo("mauro", tekken.getNome(), new HashSet<>(), tekken.getPreco(), "luta");
@@ -40,7 +42,7 @@ public class LojaControladorImplTest {
 
     @Test(expected = SaldoInsuficienteException.class)
     public void testaVendeJogoSaldoInsuficiente() throws JogoInvalidoException, SaldoInsuficienteException, UsuarioInvalidoException {
-        controlador = new LojaControladorImpl(TestUtils.getMapaUsuarios(), TestUtils.getFormatadora());
+        controlador = new LojaControllerImpl(TestUtils.getMapaUsuarios(), TestUtils.getFormatadora());
         Assert.assertTrue(controlador.adicionarDinheiroUsuario("mauro", 25.00));
         Jogo tekken = TestUtils.getJogos().get("Tekken");
         controlador.vendeJogo("mauro", tekken.getNome(), new HashSet<>(), tekken.getPreco(), "luta");
@@ -50,7 +52,7 @@ public class LojaControladorImplTest {
 
     @Test(expected = JogoInvalidoException.class)
     public void testaVendeJogorepetido() throws JogoInvalidoException, SaldoInsuficienteException, UsuarioInvalidoException {
-        controlador = new LojaControladorImpl(TestUtils.getMapaUsuarios(), TestUtils.getFormatadora());
+        controlador = new LojaControllerImpl(TestUtils.getMapaUsuarios(), TestUtils.getFormatadora());
         Jogo mkUltimate = TestUtils.getJogos().get("MK ultimate");
         controlador.adicionarDinheiroUsuario("jose", 100000);
         controlador.vendeJogo("jose", mkUltimate.getNome(), new HashSet<>(), mkUltimate.getPreco(), Luta.REPRESENTACAO_STRING);
@@ -59,7 +61,7 @@ public class LojaControladorImplTest {
 
     @Test
     public void testaVendeJogo() throws JogoInvalidoException, SaldoInsuficienteException, UsuarioInvalidoException {
-        controlador = new LojaControladorImpl(TestUtils.getMapaUsuarios(), TestUtils.getFormatadora());
+        controlador = new LojaControllerImpl(TestUtils.getMapaUsuarios(), TestUtils.getFormatadora());
         Assert.assertTrue(controlador.adicionarDinheiroUsuario("mauro", 40.00));
         Jogo tekken = TestUtils.getJogos().get("Tekken");
         controlador.vendeJogo("mauro", tekken.getNome(), new HashSet<>(), tekken.getPreco(), "luta");
@@ -69,7 +71,7 @@ public class LojaControladorImplTest {
 
     @Test
     public void testaUpgradeValido() throws UsuarioInvalidoException, UsuarioInaptoException, JogoInvalidoException, SaldoInsuficienteException {
-        controlador = new LojaControladorImpl(TestUtils.getMapaUsuarios(), TestUtils.getFormatadora());
+        controlador = new LojaControllerImpl(TestUtils.getMapaUsuarios(), TestUtils.getFormatadora());
         Jogo mkUltimate = TestUtils.getJogos().get("MK ultimate");
         controlador.adicionarDinheiroUsuario("jose", 100000);
         controlador.vendeJogo("jose", mkUltimate.getNome(), new HashSet<>(), mkUltimate.getPreco(), Luta.REPRESENTACAO_STRING);
@@ -87,7 +89,7 @@ public class LojaControladorImplTest {
 
     @Test(expected = UsuarioInaptoException.class)
     public void testaUpgradeInvalido() throws UsuarioInvalidoException, UsuarioInaptoException {
-        controlador = new LojaControladorImpl(TestUtils.getMapaUsuarios(), TestUtils.getFormatadora());
+        controlador = new LojaControllerImpl(TestUtils.getMapaUsuarios(), TestUtils.getFormatadora());
         controlador.upgrade("mauro");
     }
 }
