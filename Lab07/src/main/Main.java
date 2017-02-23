@@ -4,7 +4,7 @@ import main.controller.implementacao.LojaControllerImpl;
 import main.service.implementacao.FormatadoraCentralP2Cg;
 import util.io.implementacao.Console;
 import util.io.implementacao.Teclado;
-import main.menu.Loja;
+import main.menu.LojaFacade;
 
 import java.util.HashMap;
 
@@ -19,10 +19,10 @@ public class Main {
     }
 
     /**
-     * Injeta as depêndencias de {@link Loja} e inicia o sistema.
+     * Injeta as depêndencias de {@link LojaFacade} e inicia o sistema.
      */
     private static void iniciaLoja() {
-        Loja loja = new Loja(new Teclado(), new Console(),
+        LojaFacade loja = new LojaFacade(new Teclado(), new Console(),
                 new LojaControllerImpl(new HashMap<>(), new FormatadoraCentralP2Cg()));
 
         loja.iniciaSistema();

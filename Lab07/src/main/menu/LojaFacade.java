@@ -14,7 +14,7 @@ import java.util.Set;
 /**
  * Classe responsável pela comunicação com o usuario e exibição de menus.
  */
-public class Loja {
+public class LojaFacade {
     private static final String ADICIONAR_USUARIO_MSG = "Adicionar Usuário";
     private static final String ADICIONAR_DINHEIRO_USUARIO_MSG = "Adicionar dinheiro à conta de usuário";
     private static final String VENDER_JOGOS_USUARIO_MSG = "Vender jogo a um usuário";
@@ -73,7 +73,7 @@ public class Loja {
      * @param saida   - {@link Saida} na qual serão escritos os resultados.
      * @param loja    - {@link LojaController} ao qual será delegada a execução das operações.
      */
-    public Loja(final Entrada entrada, final Saida saida, LojaController loja) {
+    public LojaFacade(final Entrada entrada, final Saida saida, LojaController loja) {
         this.entrada = entrada;
         this.saida = saida;
         this.loja = loja;

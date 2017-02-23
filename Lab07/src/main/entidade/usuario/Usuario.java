@@ -1,6 +1,8 @@
 package main.entidade.usuario;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Map;
+import java.util.Objects;
 
 import main.entidade.jogo.Jogo;
 import main.entidade.jogo.exception.JogoInvalidoException;
@@ -101,6 +103,14 @@ public class Usuario {
         Jogo jogo = jogosComprados.get(nomeJogo);
         verificaValidadeJogo(jogo);
         this.x2p += jogo.registraJogada(score, zerou);
+    }
+    
+    public void recompensar(){
+    	
+    }
+    
+    public void punir(){
+    	
     }
 
     /**
